@@ -1,47 +1,33 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, StatusBar } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSequence,
-  Easing,
-} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, StatusBar, Animated, Platform } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { Typography } from '../../constants/typography';
 
 export default function SplashScreen() {
-  const scale = useSharedValue(0.5);
-  const opacity = useSharedValue(0);
-  const taglineOpacity = useSharedValue(0);
+  const opacity = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0)).current;
+  const scale = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0.5)).current;
+  const taglineOpacity = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0)).current;
 
   useEffect(() => {
-    scale.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.back(1.5)) });
-    opacity.value = withTiming(1, { duration: 500 });
-
+    if (Platform.OS === 'web') return;
+    Animated.parallel([
+      Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }),
+      Animated.spring(scale, { toValue: 1, friction: 6, useNativeDriver: true }),
+    ]).start();
     const timer = setTimeout(() => {
-      taglineOpacity.value = withTiming(1, { duration: 400 });
+      Animated.timing(taglineOpacity, { toValue: 1, duration: 400, useNativeDriver: true }).start();
     }, 400);
     return () => clearTimeout(timer);
   }, []);
 
-  const logoStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
-
-  const taglineStyle = useAnimatedStyle(() => ({
-    opacity: taglineOpacity.value,
-  }));
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
-      <Animated.View style={[styles.logoContainer, logoStyle]}>
+      <Animated.View style={[styles.logoContainer, { opacity, transform: [{ scale }] }]}>
         <Text style={styles.logo}>💪</Text>
         <Text style={styles.appName}>FitCoach</Text>
       </Animated.View>
-      <Animated.View style={[styles.taglineContainer, taglineStyle]}>
+      <Animated.View style={[styles.taglineContainer, { opacity: taglineOpacity }]}>
         <Text style={styles.tagline}>Hedefine Ulaşmanın En İyi Yolu</Text>
       </Animated.View>
     </View>
