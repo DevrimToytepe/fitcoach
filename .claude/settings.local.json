@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm start:*)",
+      "Bash(npm install:*)",
+      "Bash(kill 28135)",
+      "Bash(npx expo:*)",
+      "Bash(open -a Simulator)",
+      "Bash(xcrun simctl:*)",
+      "Bash(xcode-select -p)",
+      "Read(//Applications/**)",
+      "Bash(ipconfig getifaddr:*)",
+      "Bash(npm:*)",
+      "Bash(ls node_modules/react-native-worklets/plugin*)",
+      "Bash(python3 -m json.tool)",
+      "Bash(node:*)",
+      "Bash(curl -s http://localhost:8081/logs)",
+      "Bash(curl -s \"http://localhost:8081/__expo/fingerprint\")",
+      "Bash(curl -s \"http://localhost:8081/node_modules/expo/AppEntry.bundle?platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=1&transform.routerRoot=app&unstable_transformProfile=hermes-stable\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('message',''\\)[:500]\\)\")",
+      "Bash(curl -s \"http://localhost:8081/node_modules/expo/AppEntry.bundle?platform=ios&dev=true\")",
+      "Bash(curl -s \"http://localhost:8081/src/utils/uuid.ts?platform=ios&dev=true\")",
+      "Bash(curl -s \"http://localhost:8081/src/screens/auth/PTRegisterScreen.tsx?platform=ios&dev=true\")",
+      "Bash(curl -s \"http://localhost:8081/node_modules/expo/AppEntry.bundle?platform=ios&dev=true&hot=false\")",
+      "Bash(curl -s \"http://localhost:8081/__inspect/\")",
+      "Bash(npx expo-doctor:*)",
+      "Bash(npx tsc:*)",
+      "Bash(python3:*)",
+      "Bash(xargs ls:*)",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git -C /Users/macbookairm2/Desktop/fitcoach status)",
+      "Bash(brew install *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
