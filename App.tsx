@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { AppState, AppStateStatus } from 'react-native';
+import React, { useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import { AppState, AppStateStatus, View, Text, ScrollView } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from './src/store/authStore';
@@ -8,6 +8,23 @@ import { useMessageStore } from './src/store/messageStore';
 import AppNavigator from './src/navigation/AppNavigator';
 import { ToastProvider } from './src/components/common/Toast';
 import { supabase } from './src/lib/supabase';
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error, info: ErrorInfo) { console.error('App crash:', error, info); }
+  render() {
+    if (this.state.error) {
+      return (
+        <ScrollView style={{ flex: 1, padding: 20, backgroundColor: '#1a1a2e' }}>
+          <Text style={{ color: 'red', fontSize: 18, marginTop: 60 }}>Hata:</Text>
+          <Text style={{ color: 'white', marginTop: 10 }}>{String(this.state.error)}</Text>
+        </ScrollView>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export default function App() {
   const restoreSession = useAuthStore((s) => s.restoreSession);
@@ -39,12 +56,14 @@ export default function App() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <ToastProvider>
-          <AppNavigator />
-        </ToastProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <ToastProvider>
+            <AppNavigator />
+          </ToastProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }
