@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Platform } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 import SplashScreen from '../screens/onboarding/SplashScreen';
@@ -31,9 +32,11 @@ export default function AppNavigator() {
 
   if (showSplash) return <SplashScreen />;
 
+  const navStyle = Platform.OS === 'web' ? { flex: 1, height: '100%' as any } : undefined;
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
+    <NavigationContainer style={navStyle}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: Platform.OS === 'web' ? 'none' : 'fade' }}>
         {!isAuthenticated ? (
           <Stack.Screen name="Auth" component={AuthNavigator} />
         ) : user?.userType === 'athlete' ? (

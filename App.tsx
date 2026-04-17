@@ -1,5 +1,5 @@
 import React, { useEffect, Component, ErrorInfo, ReactNode } from 'react';
-import { AppState, AppStateStatus, View, Text, ScrollView } from 'react-native';
+import { AppState, AppStateStatus, View, Text, ScrollView, Platform, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from './src/store/authStore';
@@ -55,10 +55,14 @@ export default function App() {
     return () => subscription.remove();
   }, []);
 
+  const rootStyle = Platform.OS === 'web'
+    ? { flex: 1, height: '100%' as any, width: '100%' as any }
+    : { flex: 1 };
+
   return (
     <ErrorBoundary>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
+      <GestureHandlerRootView style={rootStyle}>
+        <SafeAreaProvider style={rootStyle}>
           <ToastProvider>
             <AppNavigator />
           </ToastProvider>
